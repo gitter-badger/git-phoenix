@@ -25,17 +25,14 @@ class Phoenix(abc.ABC):
         parser = parser_class()
         template = parser.parse(file_path=template_path)
 
-        try:
-            # Just try to check if user passed arguments
-            args[1]
-
+        if ([] != args[1:]):
             # Create execution object to carry template and arguments through execution
             execution = Execution(args, template)
 
             Logger.info(cls=Phoenix, msg="Firing rules...")
             Rules.fire_rules(execution=execution)
-        except IndexError as e:
-            Logger.error(cls=Phoenix, msg="Please inform arguments to Phoenix! " + PythonCommons.beautify_exception())
+        else:
+            Logger.error(cls=Phoenix, msg="Please inform arguments to Phoenix! ")
 
 if (__name__ == "__main__"):
     args = sys.argv[1:]
