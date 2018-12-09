@@ -33,7 +33,7 @@ class GitCommons(abc.ABC):
                                          PythonCommons.NC +
                                          "based on" +
                                          PythonCommons.LIGHT_CYAN +
-                                         " {} " +
+                                         " {}" +
                                          PythonCommons.NC +
                                          "...").format(branch, origin))
         try:
@@ -166,7 +166,7 @@ class GitCommons(abc.ABC):
         destination = translated_merge_message["destination"]
 
         if ([] != args[1:]):
-            origin = re.search(PythonCommons.define_pattern(args[1]), origin).group(0)
+            origin = re.search(PythonCommons.define_pattern(args[1], False, False), origin).group(0)
 
         return origin
 

@@ -44,8 +44,18 @@ class PythonCommons(abc.ABC):
         return user_input
 
     @staticmethod
-    def define_pattern(pattern):
-        return pattern.replace("^", "").replace("$", "")
+    def define_pattern(pattern, should_start, should_end):
+        for i in range(len(pattern)):
+            pattern[i] = pattern[i].replace("^", "").replace("$", "").replace("/", "\/")
+
+        pattern = "".join(pattern)
+
+        if (should_start):
+            pattern = "^" + pattern
+        if(should_end):
+            pattern = pattern + "$"
+
+        return pattern
 
     @staticmethod
     def beautify_exception():

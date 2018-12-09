@@ -56,25 +56,25 @@ class Executable:
             if (value.startswith("#")):
                 method_name = value[1:]
 
-                try:
-                    if (method_name.startswith("phoenix_") or method_name.startswith("git_")):
-                        prefix = method_name.split("_")[0].title()
-                        method_name = method_name[len(prefix) + 1:]
-                        cls = prefix + "Commons"
-                        method = getattr(eval(cls), method_name.split("(")[0])
+                #try:
+                if (method_name.startswith("phoenix_") or method_name.startswith("git_")):
+                    prefix = method_name.split("_")[0].title()
+                    method_name = method_name[len(prefix) + 1:]
+                    cls = prefix + "Commons"
+                    method = getattr(eval(cls), method_name.split("(")[0])
 
-                        if (self._has_parameters(method_name)):
-                            parameters = method_name.split("(")[1][:-1].split(", ")
+                    if (self._has_parameters(method_name)):
+                        parameters = method_name.split("(")[1][:-1].split(", ")
 
-                            for i in range(len(parameters)):
-                                parameters[i] = self.change_value(parameters[i])
+                        for i in range(len(parameters)):
+                            parameters[i] = self.change_value(parameters[i])
 
-                            value = method(parameters)
-                        else:
-                            value = method()
+                        value = method(parameters)
                     else:
-                        value = getattr(self, method_name)()
-                except AttributeError as e:
+                        value = method()
+                else:
+                    value = getattr(self, method_name)()
+                #except AttributeError as e:
                     Logger.error(cls=Executable, msg=("Method" +
                                                       PythonCommons.LIGHT_PURPLE +
                                                       " {} " +
@@ -93,6 +93,8 @@ class Executable:
                 new_value[parameter] = self.change_value(value)
 
             value = new_value
+        if (any(isinstance(vl, list) for vl in value)):
+            value = [item for sublist in value for item in sublist]
 
         return value
 

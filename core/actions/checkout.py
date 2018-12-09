@@ -1,4 +1,4 @@
-import re
+import regex
 import sys
 from .executable import Executable
 from commons.git import GitCommons
@@ -15,7 +15,7 @@ class Checkout(Executable):
     def execute(self):
 
         if (hasattr(self, "origin_pattern")):
-            pattern = re.compile(self.origin_pattern)
+            pattern = regex.compile(self.origin_pattern)
 
             if (not pattern.match(self.origin)):
                 pattern_msg = None
@@ -36,7 +36,7 @@ class Checkout(Executable):
                 Logger.error(cls=Checkout, msg="Invalid origin! Please execute the command with a valid origin branch!")
 
         if (hasattr(self, "pattern")):
-            pattern = re.compile(self.pattern)
+            pattern = regex.compile(self.pattern)
 
             if (not pattern.match(self.name)):
                 pattern_msg = None
@@ -88,6 +88,9 @@ class Checkout(Executable):
             self.pattern = PhoenixCommons.determine_pattern(self.pattern)
 
     def confirm_execution(self):
+        if (hasattr(self, "prefix")):
+            name = self.prefix + "/" + self.name
+
         return super()._confirm_execution(cls=Checkout, msg=("Confirm creating branch" +
                                                              PythonCommons.LIGHT_CYAN +
                                                              " {} " +
@@ -96,4 +99,4 @@ class Checkout(Executable):
                                                              PythonCommons.LIGHT_CYAN +
                                                              " {}" +
                                                              PythonCommons.NC +
-                                                             "?").format(self.name, self.origin))
+                                                             "?").format(name, self.origin))
