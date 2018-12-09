@@ -49,7 +49,7 @@ def install():
         for i in range(0, len(folders)):
             symbolic_link_folder_array[-2] = folders[i]
             symbolic_link_folder_array[-1] = dest_folders[i]
-            subprocess.run(symbolic_link_array)
+            subprocess.run(symbolic_link_folder_array)
 
     subprocess.run(["pip", "install", "colorlog"])
     subprocess.run(["pip", "install", "regex"])
