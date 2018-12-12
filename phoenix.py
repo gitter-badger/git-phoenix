@@ -5,7 +5,6 @@ import os
 import sys
 from commons.git import GitCommons
 from commons.phoenix import PhoenixCommons
-from commons.python import PythonCommons
 from commons.logger import Logger
 from core.execution import Execution
 from core.rules import Rules
@@ -33,6 +32,7 @@ class Phoenix(abc.ABC):
             Rules.fire_rules(execution=execution)
         else:
             Logger.error(cls=Phoenix, msg="Please inform arguments to Phoenix! ")
+
 
 if (__name__ == "__main__"):
     args = sys.argv[1:]

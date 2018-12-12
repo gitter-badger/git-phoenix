@@ -37,6 +37,15 @@ class PhoenixCommons:
             return template
 
     @staticmethod
+    def retrieve_commands(template):
+        commands = []
+
+        for command in template["commands"]:
+            commands.append(command["name"])
+
+        return commands
+
+    @staticmethod
     def retrieve_command(commands, command_name):
         Logger.info(cls=PhoenixCommons, msg="Validating command...")
 
@@ -75,8 +84,9 @@ class PhoenixCommons:
 
     @staticmethod
     def determine_pattern(pattern):
-        for i in range(len(pattern)):
-            pattern[i] = pattern[i].replace("^", "").replace("$", "").replace("/", "\/")
+        if (isinstance(pattern, list)):
+            for i in range(len(pattern)):
+                pattern[i] = pattern[i].replace("^", "").replace("$", "").replace("/", "\/")
 
         pattern = "".join(pattern)
         pattern = "^" + pattern + "$"

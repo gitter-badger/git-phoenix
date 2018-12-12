@@ -7,6 +7,7 @@ from git import Repo
 from git.exc import GitCommandError
 from .logger import Logger
 from .python import PythonCommons
+from exception.custom_exceptions import ExecutionException
 
 
 class GitCommons(abc.ABC):
@@ -65,7 +66,8 @@ class GitCommons(abc.ABC):
             try:
                 git.merge(branch, "--no-ff")
             except:
-                Logger.error(cls=GitCommons, msg="You have conflicts on your working tree! Resolve them before commiting!")
+                Logger.warn(cls=GitCommons, msg="You have conflicts on your working tree! Resolve them before commiting!")
+                raise ExecutionException()
         else:
             Logger.warn(cls=GitCommons, msg=("Branch" +
                                              PythonCommons.LIGHT_CYAN +
@@ -89,6 +91,19 @@ class GitCommons(abc.ABC):
             git.pull()
         except GitCommandError:
             pass
+
+    @staticmethod
+    def delete(pattern):
+        git = Repo().git
+        Logger.info(cls=GitCommons, msg=("Deleting branch(es) " +
+                                         PythonCommons.LIGHT_CYAN +
+                                         "{}" +
+                                         PythonCommons.NC +
+                                         "...").format(pattern))
+
+        branches = [branch.replace(" ", "") for branch in git.branch().splitlines()]
+        branches = list(filter(lambda x: x.startswith(pattern), branches))
+        [git.execute(["git", "branch", "-D", branch]) for branch in branches]
 
     @staticmethod
     def has_unstaged_files():
@@ -202,10 +217,21 @@ class GitCommons(abc.ABC):
 
     @staticmethod
     def is_ahead():
-        repo = Repo()
-        branch = GitCommons.retrieve_current_branch()
+        try:
+            repo = Repo()
+            branch = GitCommons.retrieve_current_branch()
 
-        commits_ahead = repo.iter_commits("origin/" + branch + ".." + branch)
-        number_of_commits = sum(1 for c in commits_ahead)
+            commits_ahead = repo.iter_commits("origin/" + branch + ".." + branch)
+            number_of_commits = sum(1 for c in commits_ahead)
 
-        return number_of_commits > 0
+            return number_of_commits > 0
+        except GitCommandError:
+            Logger.error(cls=GitCommons, msg=("Your current branch (" +
+                                              PythonCommons.LIGHT_CYAN +
+                                              "{}" +
+                                              PythonCommons.NC +
+                                              ") doesn't exists on remote repo. Please use" +
+                                              PythonCommons.LIGHT_PURPLE +
+                                              " git push origin {}" +
+                                              PythonCommons.NC +
+                                              ".").format(branch, branch))

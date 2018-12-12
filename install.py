@@ -34,11 +34,12 @@ def install():
         origin_file = origin_file.replace("/", "\\")
         origin_commons = origin_folder + "\\commons"
         origin_core = origin_folder + "\\core"
+        origin_exception = origin_folder + "\\exception"
         origin_parser_local = origin_folder + "\\parser_local"
 
         scripts = [folder + "git-phoenix", folder + "git-px"]
-        folders = [folder + "commons", folder + "core", folder + "parser_local"]
-        dest_folders = [origin_commons, origin_core, origin_parser_local]
+        folders = [folder + "commons", folder + "core", folder + "exception", folder + "parser_local"]
+        dest_folders = [origin_commons, origin_core, origin_exception, origin_parser_local]
         symbolic_link_script_array = ["cmd", "/c", "mklink", "", origin_file]
         symbolic_link_folder_array = ["cmd", "/c", "mklink", "/J", "", ""]
 

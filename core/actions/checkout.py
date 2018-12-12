@@ -59,7 +59,7 @@ class Checkout(Executable):
             if (hasattr(self, "prefix")):
                 self.name = self.prefix + "/" + self.name
 
-            GitCommons.checkout_new_branch(origin=self.origin, branch=self.name)
+        GitCommons.checkout_new_branch(origin=self.origin, branch=self.name)
 
     def _parse(self):
 

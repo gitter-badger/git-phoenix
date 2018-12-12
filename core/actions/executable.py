@@ -43,7 +43,12 @@ class Executable:
         value_split = value.split(".")
 
         if ("commons" == value_split[0]):
-            return self.change_value(self.execution.commons[value[len("commons."):]])
+            new_value = self.change_value(self.execution.commons[value[len("commons."):]])
+
+            if ("join" in value_split):
+                new_value = "".join(new_value)
+
+            return new_value
         else:
             Logger.error(cls=Executable, msg=("Parameter search is available only for" +
                                               PythonCommons.LIGHT_PURPLE +
@@ -56,25 +61,25 @@ class Executable:
             if (value.startswith("#")):
                 method_name = value[1:]
 
-                #try:
-                if (method_name.startswith("phoenix_") or method_name.startswith("git_")):
-                    prefix = method_name.split("_")[0].title()
-                    method_name = method_name[len(prefix) + 1:]
-                    cls = prefix + "Commons"
-                    method = getattr(eval(cls), method_name.split("(")[0])
+                try:
+                    if (method_name.startswith("phoenix_") or method_name.startswith("git_")):
+                        prefix = method_name.split("_")[0].title()
+                        method_name = method_name[len(prefix) + 1:]
+                        cls = prefix + "Commons"
+                        method = getattr(eval(cls), method_name.split("(")[0])
 
-                    if (self._has_parameters(method_name)):
-                        parameters = method_name.split("(")[1][:-1].split(", ")
+                        if (self._has_parameters(method_name)):
+                            parameters = method_name.split("(")[1][:-1].split(", ")
 
-                        for i in range(len(parameters)):
-                            parameters[i] = self.change_value(parameters[i])
+                            for i in range(len(parameters)):
+                                parameters[i] = self.change_value(parameters[i])
 
-                        value = method(parameters)
+                            value = method(parameters)
+                        else:
+                            value = method()
                     else:
-                        value = method()
-                else:
-                    value = getattr(self, method_name)()
-                #except AttributeError as e:
+                        value = getattr(self, method_name)()
+                except AttributeError as e:
                     Logger.error(cls=Executable, msg=("Method" +
                                                       PythonCommons.LIGHT_PURPLE +
                                                       " {} " +
@@ -93,8 +98,10 @@ class Executable:
                 new_value[parameter] = self.change_value(value)
 
             value = new_value
-        if (any(isinstance(vl, list) for vl in value)):
-            value = [item for sublist in value for item in sublist]
+
+        if (isinstance(value, list)):
+            if (any(isinstance(vl, list) for vl in value)):
+                value = [item for sublist in value for item in sublist]
 
         return value
 

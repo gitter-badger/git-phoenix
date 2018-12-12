@@ -45,10 +45,11 @@ class PythonCommons(abc.ABC):
 
     @staticmethod
     def define_pattern(pattern, should_start, should_end):
-        for i in range(len(pattern)):
-            pattern[i] = pattern[i].replace("^", "").replace("$", "").replace("/", "\/")
-
-        pattern = "".join(pattern)
+        if (isinstance(pattern, list)):
+            for i in range(len(pattern)):
+                pattern[i] = pattern[i].replace("^", "").replace("$", "").replace("/", "\/")
+    
+            pattern = "".join(pattern)
 
         if (should_start):
             pattern = "^" + pattern

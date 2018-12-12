@@ -5,6 +5,7 @@ from commons.git import GitCommons
 from commons.logger import Logger
 from commons.phoenix import PhoenixCommons
 from commons.python import PythonCommons
+from exception.custom_exceptions import ExecutionException
 
 
 class Merge(Executable):
@@ -34,8 +35,25 @@ class Merge(Executable):
                                             PythonCommons.NC).format(self.origin, pattern_msg))
                 Logger.error(cls=Merge, msg="Invalid origin! Please execute the command with a valid origin branch!")
 
+        all_destinations = self.destination[:]
+
         for destination in self.destination:
-            GitCommons.merge(self.origin, destination)
+            try:
+                all_destinations.pop(0)
+                GitCommons.merge(self.origin, destination)
+            except ExecutionException:
+                if (len(all_destinations) > 0):
+                    Logger.warn(cls=Merge, msg=("Due to the conflict, the branch" +
+                                                PythonCommons.LIGHT_CYAN +
+                                                " {} " +
+                                                PythonCommons.NC +
+                                                "couldn't be merged with branch(es)" +
+                                                PythonCommons.LIGHT_CYAN +
+                                                " {}" +
+                                                PythonCommons.NC +
+                                                "!").format(self.origin, ", ".join(all_destinations)))
+
+                raise ExecutionException()
 
     def _parse(self):
         if (not hasattr(self, "origin")):
@@ -63,7 +81,7 @@ class Merge(Executable):
                         pattern[i] = self.change_value(pattern[i])
 
                     index_to_search = self.destination_strategy["index"]
-                    pattern_to_search = PythonCommons.define_pattern(pattern[index_to_search])
+                    pattern_to_search = PythonCommons.define_pattern(pattern[index_to_search], False, False)
 
                     pattern_found = re.search(pattern_to_search, self.origin).group(0)
                     pattern[index_to_search] = pattern_found
