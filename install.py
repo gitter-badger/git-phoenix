@@ -7,11 +7,19 @@ def install():
     origin_folder = os.getcwd()
     origin_file = origin_folder + "/phoenix.py"
     system = platform.system()
+
     dependencies_folder = "./dependencies/"
+
+    colorama_file = dependencies_folder + "colorama-0.4.1-py2.py3-none-any.whl"
     colorlog_file = dependencies_folder + "colorlog-3.1.4-py2.py3-none-any.whl"
-    regex_file = dependencies_folder + "regex-2018.11.22.tar.gz"
+    gitpython_file = dependencies_folder + "GitPython-2.1.11-py2.py3-none-any.whl"
+    regex_file_linux = dependencies_folder + "regex-2018.11.22.tar.gz"
+    regex_file_windows = dependencies_folder + "regex-2018.11.22-cp37-none-win32.whl"
+
+    colorama_install = ["pip", "install", colorama_file]
     colorlog_install = ["pip", "install", colorlog_file]
-    regex_install = ["pip", "install", regex_file]
+    gitpython_install = ["pip", "install", gitpython_file]
+    regex_install = ["pip", "install"]
 
     if ("Linux" == system):
         import stat
@@ -31,8 +39,11 @@ def install():
             st = os.stat(script)
             os.chmod(script, st.st_mode | stat.S_IEXEC)
 
+        colorama_install.insert(0, "sudo")
         colorlog_install.insert(0, "sudo")
+        gitpython_install.insert(0, "sudo")
         regex_install.insert(0, "sudo")
+        regex_install.append(regex_file_linux)
     elif ("Windows" == system):
         folder = subprocess.run(["where", "git"], stdout=subprocess.PIPE)
         folder = folder.stdout.decode('utf-8').replace("\n", "")
@@ -60,7 +71,11 @@ def install():
             symbolic_link_folder_array[-1] = dest_folders[i]
             subprocess.run(symbolic_link_folder_array)
 
+        regex_install.append(regex_file_windows)
+
+    subprocess.run(colorama_install)
     subprocess.run(colorlog_install)
+    subprocess.run(gitpython_install)
     subprocess.run(regex_install)
 
 
