@@ -7,6 +7,11 @@ def install():
     origin_folder = os.getcwd()
     origin_file = origin_folder + "/phoenix.py"
     system = platform.system()
+    dependencies_folder = "./dependencies/"
+    colorlog_file = dependencies_folder + "colorlog-3.1.4-py2.py3-none-any.whl"
+    regex_file = dependencies_folder + "regex-2018.11.22.tar.gz"
+    colorlog_install = ["pip", "install", colorlog_file]
+    regex_install = ["pip", "install", regex_file]
 
     if ("Linux" == system):
         import stat
@@ -25,6 +30,9 @@ def install():
             subprocess.run(symbolic_link_array)
             st = os.stat(script)
             os.chmod(script, st.st_mode | stat.S_IEXEC)
+
+        colorlog_install.insert(0, "sudo")
+        regex_install.insert(0, "sudo")
     elif ("Windows" == system):
         folder = subprocess.run(["where", "git"], stdout=subprocess.PIPE)
         folder = folder.stdout.decode('utf-8').replace("\n", "")
@@ -52,8 +60,8 @@ def install():
             symbolic_link_folder_array[-1] = dest_folders[i]
             subprocess.run(symbolic_link_folder_array)
 
-    subprocess.run(["pip", "install", "colorlog"])
-    subprocess.run(["pip", "install", "regex"])
+    subprocess.run(colorlog_install)
+    subprocess.run(regex_install)
 
 
 if (__name__ == "__main__"):
