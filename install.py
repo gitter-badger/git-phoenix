@@ -12,12 +12,14 @@ def install():
 
     colorama_file = dependencies_folder + "colorama-0.4.1-py2.py3-none-any.whl"
     colorlog_file = dependencies_folder + "colorlog-3.1.4-py2.py3-none-any.whl"
+    gitdb2_file = dependencies_folder + "gitdb2-2.0.5-py2.py3-none-any.whl"
     gitpython_file = dependencies_folder + "GitPython-2.1.11-py2.py3-none-any.whl"
     regex_file_linux = dependencies_folder + "regex-2018.11.22.tar.gz"
     regex_file_windows = dependencies_folder + "regex-2018.11.22-cp37-none-win32.whl"
 
     colorama_install = ["pip", "install", colorama_file]
     colorlog_install = ["pip", "install", colorlog_file]
+    gitdb2_install = ["pip", "install", gitdb2_file]
     gitpython_install = ["pip", "install", gitpython_file]
     regex_install = ["pip", "install"]
 
@@ -41,6 +43,7 @@ def install():
 
         colorama_install.insert(0, "sudo")
         colorlog_install.insert(0, "sudo")
+        gitdb2_install.insert(0, "sudo")
         gitpython_install.insert(0, "sudo")
         regex_install.insert(0, "sudo")
         regex_install.append(regex_file_linux)
@@ -75,6 +78,7 @@ def install():
 
     subprocess.run(colorama_install)
     subprocess.run(colorlog_install)
+    subprocess.run(gitdb2_install)
     subprocess.run(gitpython_install)
     subprocess.run(regex_install)
 
