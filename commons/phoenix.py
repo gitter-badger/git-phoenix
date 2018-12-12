@@ -114,5 +114,5 @@ class PhoenixCommons:
         print(PythonCommons.YELLOW + "|  __/| '" + PythonCommons.BROWN_ORANGE + "_ \ / _ \ " + PythonCommons.LIGHT_RED + "/ _ \ '_ \\" + PythonCommons.RED + "| \ \/ /")
         print(PythonCommons.YELLOW + "| |   | |" + PythonCommons.BROWN_ORANGE + " | | (_) |" + PythonCommons.LIGHT_RED + "  __/ | | "  + PythonCommons.RED + "| |>  <")
         print(PythonCommons.YELLOW + "\_|   |_|" + PythonCommons.BROWN_ORANGE + " |_|\___/ " + PythonCommons.LIGHT_RED + "\___|_| |_"  + PythonCommons.RED + "|_/_/\_\\" + PythonCommons.NC)
-        print(PythonCommons.LIGHT_BLUE + "                               v0.0.1" + PythonCommons.NC)
+        print(PythonCommons.LIGHT_BLUE + "                               v0.1.0" + PythonCommons.NC)
         print()
