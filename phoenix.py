@@ -24,7 +24,10 @@ class Phoenix(abc.ABC):
         parser = parser_class()
         template = parser.parse(file_path=template_path)
 
-        if ([] != args[1:]):
+        if ([] != args[1:] or "init" == args[0]):
+            if ("init" == args[0] and {} == template["init"]):
+                Logger.error(cls=Phoenix, msg="Your template doesn't have an init component!")
+
             # Create execution object to carry template and arguments through execution
             execution = Execution(args, template)
 

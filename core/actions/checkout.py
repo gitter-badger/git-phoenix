@@ -88,6 +88,8 @@ class Checkout(Executable):
             self.pattern = PhoenixCommons.determine_pattern(self.pattern)
 
     def confirm_execution(self):
+        name = self.name
+
         if (hasattr(self, "prefix")):
             name = self.prefix + "/" + self.name
 

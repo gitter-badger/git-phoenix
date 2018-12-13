@@ -8,8 +8,12 @@ class Execution:
         self.template = template
         self.init = self.template["init"]
         self.commons = self.template["commons"]
-        self.command = PhoenixCommons.retrieve_command(commands=self.template["commands"], command_name=args[0])
-        self.action = PhoenixCommons.retrieve_action(actions=self.command["actions"], action_name=args[1])
+
+        if ("init" != args[0]):
+            self.command = PhoenixCommons.retrieve_command(commands=self.template["commands"], command_name=args[0])
+            self.action = PhoenixCommons.retrieve_action(actions=self.command["actions"], action_name=args[1])
+        else:
+            self.action = self.init
 
     @property
     def args(self):
