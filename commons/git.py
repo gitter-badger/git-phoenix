@@ -14,7 +14,7 @@ class GitCommons(abc.ABC):
 
     @staticmethod
     def checkout(branch):
-        git = Repo().git
+        git = Repo(".", search_parent_directories=True).git
         Logger.info(cls=GitCommons, msg=("Checking out branch" +
                                          PythonCommons.LIGHT_CYAN +
                                          " {}" +
@@ -25,7 +25,7 @@ class GitCommons(abc.ABC):
 
     @staticmethod
     def checkout_new_branch(origin, branch):
-        git = Repo().git
+        git = Repo(".", search_parent_directories=True).git
         GitCommons.checkout(origin)
         GitCommons.pull(origin)
         Logger.info(cls=GitCommons, msg=("Creating branch" +
@@ -47,10 +47,10 @@ class GitCommons(abc.ABC):
                                               "already exists!").format(branch))
 
     @staticmethod
-    def merge(branch, destination):
-        git = Repo().git
+    def merge(branch, destination, allow_merge_again):
+        git = Repo(".", search_parent_directories=True).git
 
-        if (not GitCommons._already_merged(destination, branch)):
+        if (allow_merge_again or not GitCommons._already_merged(destination, branch)):
             GitCommons.checkout(destination)
             GitCommons.pull(destination)
             Logger.info(cls=GitCommons, msg=("Merging branch" +
@@ -81,7 +81,7 @@ class GitCommons(abc.ABC):
 
     @staticmethod
     def pull(branch):
-        git = Repo().git
+        git = Repo(".", search_parent_directories=True).git
         Logger.info(cls=GitCommons, msg=("Updating branch " +
                                          PythonCommons.LIGHT_CYAN +
                                          "{}" +
@@ -94,7 +94,7 @@ class GitCommons(abc.ABC):
 
     @staticmethod
     def delete(pattern):
-        git = Repo().git
+        git = Repo(".", search_parent_directories=True).git
         Logger.info(cls=GitCommons, msg=("Deleting branch(es) " +
                                          PythonCommons.LIGHT_CYAN +
                                          "{}" +
@@ -107,7 +107,7 @@ class GitCommons(abc.ABC):
 
     @staticmethod
     def has_unstaged_files():
-        git = Repo().git
+        git = Repo(".", search_parent_directories=True).git
         unstaged_files = git.status("--porcelain")
 
         if (not unstaged_files):
@@ -122,7 +122,7 @@ class GitCommons(abc.ABC):
     @staticmethod
     def retrieve_config(key):
         try:
-            git = Repo().git
+            git = Repo(".", search_parent_directories=True).git
             return git.config(key)
         except GitCommandError:
             return None
@@ -141,19 +141,19 @@ class GitCommons(abc.ABC):
     @staticmethod
     def is_git_repo():
         try:
-            git.Repo(os.getcwd()).git_dir
+            repo = git.Repo(".", search_parent_directories=True)
             return True
         except git.exc.InvalidGitRepositoryError:
             return False
 
     @staticmethod
     def retrieve_current_branch():
-        repo = Repo()
+        repo = Repo(".", search_parent_directories=True)
         return repo.active_branch.name
 
     @staticmethod
     def log(parameters):
-        git = Repo().git
+        git = Repo(".", search_parent_directories=True).git
 
         if (parameters):
             return git.log(parameters)
@@ -218,7 +218,7 @@ class GitCommons(abc.ABC):
     @staticmethod
     def is_ahead():
         try:
-            repo = Repo()
+            repo = Repo(".", search_parent_directories=True)
             branch = GitCommons.retrieve_current_branch()
 
             commits_ahead = repo.iter_commits("origin/" + branch + ".." + branch)

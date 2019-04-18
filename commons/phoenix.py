@@ -28,7 +28,7 @@ class PhoenixCommons:
             Logger.error(cls=PhoenixCommons, msg=("You must specify a template to use " +
                                                   "git phoenix! Run " +
                                                   PythonCommons.GREEN +
-                                                  "git phoenix config template " +
+                                                  "git config phoenix.template.path " +
                                                   PythonCommons.LIGHT_PURPLE +
                                                   "path_to_template " +
                                                   PythonCommons.NC +

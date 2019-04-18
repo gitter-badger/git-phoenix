@@ -1,5 +1,5 @@
 import re
-import sys
+import ast
 from .executable import Executable
 from commons.git import GitCommons
 from commons.logger import Logger
@@ -40,7 +40,7 @@ class Merge(Executable):
         for destination in self.destination:
             try:
                 all_destinations.pop(0)
-                GitCommons.merge(self.origin, destination)
+                GitCommons.merge(self.origin, destination, self.allow_merge_again)
             except ExecutionException:
                 if (len(all_destinations) > 0):
                     Logger.warn(cls=Merge, msg=("Due to the conflict, the branch" +
@@ -93,6 +93,10 @@ class Merge(Executable):
                                                  " {} " +
                                                  PythonCommons.NC +
                                                  "not implemented yet!").format(strategy))
+        if (hasattr(self, "allow_merge_again")):
+            self.allow_merge_again = self.allow_merge_again
+        else:
+            self.allow_merge_again = False
 
     def confirm_execution(self):
         destination = ", ".join(self.destination)
